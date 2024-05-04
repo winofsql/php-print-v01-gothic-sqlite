@@ -27,8 +27,9 @@ select 社員コード,氏名,フリガナ from 社員マスタ order by 社員�
 QUERY;
 
 // クエリーの実行
-$result = $mysqli->query( $_POST["query"] );
-while ( $row = $result->fetch_array( MYSQLI_BOTH ) ) {
+$statement = $pdo->prepare( $_POST["query"] );
+$statement->execute();
+    while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 
     // 初回のみヘッダを印字する
     if(  $init  ) {
@@ -65,8 +66,6 @@ while ( $row = $result->fetch_array( MYSQLI_BOTH ) ) {
 
 }
 
-$mysqli->close();
-
 // ブラウザへ PDF を出力します
 $pdf->Output("test_output.pdf", "I");
 
@@ -81,7 +80,7 @@ function print_header( $pdf ) {
 
     // ヘッダ内での印字位置コントロール
     $cur_position = $page_info['tm'];	// トップマージン
-    
+
     // ページの先頭
     $pdf->SetFont('ume-tgo4', '', 30);
     user_text( $pdf, 100,   $cur_position-4, "社員一覧表" );
@@ -89,13 +88,13 @@ function print_header( $pdf ) {
 
     user_text( $pdf, 224,   $cur_position, "ページ :" );
     user_text( $pdf, 250,   $cur_position, number_format($counter+1), 5, 0, "R" );
-    
+
     // データのタイトル
     $cur_position += $GLOBALS['row_height'] * 2;    // 2行進む( 1行空ける )
     user_text( $pdf, 10,    $cur_position, "コード" );
     user_text( $pdf, 28,    $cur_position, "氏名" );
     user_text( $pdf, 51+15, $cur_position, "フリガナ" );
-    
+
 }
 
 ?>
