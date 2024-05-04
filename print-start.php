@@ -29,7 +29,7 @@ QUERY;
 // クエリーの実行
 $statement = $pdo->prepare( $_POST["query"] );
 $statement->execute();
-    while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 
     // 初回のみヘッダを印字する
     if(  $init  ) {
